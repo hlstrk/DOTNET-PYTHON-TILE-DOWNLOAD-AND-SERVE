@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Map Tiles Demo</title>
+    <link href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" rel="stylesheet" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+<body>
+    <div id="mapid" style="height: 50rem;"></div>
+    <script>
+        // Create a Leaflet map and set its view
+        const map = L.map("mapid").setView([40.799565595801035, 30.29116657739119], 16);
+
+        // Add a tile layer to the map
+        L.tileLayer("api/Tile/{z}/{x}/{y}", {
+            minZoom: 16,
+            maxZoom: 20,
+        }).addTo(map);
+
+        // Create a marker with a custom icon representing the plane
+        const planeIcon = L.icon({
+            iconUrl: '/images/plane.png',
+            iconSize: [32, 32],
+            iconAnchor: [16, 16],
+        });
+
+        const planeMarker = L.marker([40.799565595801035, 30.29116657739119], {
+            icon: planeIcon,
+        }).addTo(map);
+
+        // Animate the marker to move across the map
+        async function updatePlaneLocation() {
+            try {
+                const response = await fetch('/api/Communication/GetAllyPlane');
+                const data = await response.json();
+                const planeLatLng = [data.iha_enlem, data.iha_boylam];
+                const headingRadians = data.iha_yonelme * Math.PI / 180; // Convert degrees to radians
+
+                // Set the marker's new position
+                planeMarker.setLatLng(planeLatLng);
+
+                // Set the marker's new icon with the updated rotation angle
+                planeMarker.setIcon(
+                    L.icon({
+                        iconUrl: '/images/plane.png',
+                        iconSize: [32, 32],
+                        iconAnchor: [16, 16],
+                        rotation: headingRadians // set the rotation angle directly on the icon object using radians
+                    })
+                );
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        // Call the updatePlaneLocation function every 200 milliseconds to update the plane's position and rotation
+        setInterval(updatePlaneLocation, 200);
+    </script>
+    </body>
+</html>
