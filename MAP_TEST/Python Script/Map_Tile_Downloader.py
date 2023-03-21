@@ -4,7 +4,7 @@ import requests
 from tqdm import tqdm, trange
 
 # Set the parameters for the tile downloader
-url_pattern = 'https://api.mapbox.com/v4/mapbox.satellite/{}/{}/{}.jpg?access_token=pk.eyJ1IjoiaGxzdHJrIiwiYSI6ImNsZmEwdzE2YTBkZWwzcG11MGp6bmZoNTQifQ.MP9aaEJ_WbRi-d3cbDQ2Dw'
+url_pattern = 'https://api.mapbox.com/v4/mapbox.satellite/{}/{}/{}.jpg?access_token=YOUR-MAPBOX-API-TOKEN'
 zoom_levels = [19,17,15,14,16, 18, 20]
 coord_lat, coord_lon = 40.799565595801035,30.29116657739119
 tile_radius = 10  # in tiles, equivalent to 20km
